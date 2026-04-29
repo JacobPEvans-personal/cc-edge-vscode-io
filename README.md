@@ -1,6 +1,8 @@
 # cc-edge-vscode-io
 
-Cribl Edge Pack that collects VS Code application logs, Copilot extension logs, user settings, and extension inventory from the local filesystem. Includes pipeline enrichment to identify Copilot-specific log sources.
+Cribl Edge Pack that collects VS Code application logs, Copilot extension
+logs, user settings, and extension inventory from the local filesystem.
+Includes pipeline enrichment to identify Copilot-specific log sources.
 
 ## Pack Components
 
@@ -35,6 +37,21 @@ The `main` pipeline adds a `copilot_source` field to events based on the source 
 - Verify `VSCODE_HOME` points to the correct VS Code data directory
 - The `vscode-logs` input recursively scans `$VSCODE_HOME/logs/` — increase the polling interval from 30s if scan volume is too high
 - Settings and extensions inputs are disabled by default — enable in Cribl Edge UI as needed
+
+## Deployment
+
+Production install onto the homelab Cribl Edge LXCs is automated by the
+`cribl_packs` role in
+[ansible-proxmox-apps](https://github.com/JacobPEvans/ansible-proxmox-apps/tree/main/roles/cribl_packs).
+Pack version is pinned in `roles/cribl_packs/defaults/main.yml`.
+
+To roll out a new release: cut a tag in this repo (publishes the `.crbl`
+asset), bump `version:` for `cc-edge-vscode-io` in
+`ansible-proxmox-apps/roles/cribl_packs/defaults/main.yml`, then run
+`ansible-playbook playbooks/site.yml --tags cribl_packs` from that repo.
+The role downloads the matching `.crbl`, unpacks it into
+`/opt/cribl/local/edge/packs/cc-edge-vscode-io/`, and restarts
+`cribl-edge.service` only when the version actually changed.
 
 ## Release Notes
 
