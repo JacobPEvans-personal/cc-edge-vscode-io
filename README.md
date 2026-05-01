@@ -47,7 +47,7 @@ Pack version is pinned in `roles/cribl_packs/defaults/main.yml`.
 
 To roll out a new release: cut a tag in this repo (publishes the `.crbl`
 asset), bump `version:` for `cc-edge-vscode-io` in
-`ansible-proxmox-apps/roles/cribl_packs/defaults/main.yml`, then run
+`roles/cribl_packs/defaults/main.yml`, then run
 `ansible-playbook playbooks/site.yml --tags cribl_packs` from that repo.
 The role downloads the matching `.crbl`, unpacks it into
 `/opt/cribl/local/edge/packs/cc-edge-vscode-io/`, and restarts
