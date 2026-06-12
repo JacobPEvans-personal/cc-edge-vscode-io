@@ -1,1 +1,21 @@
-{"name":"cc-edge-vscode-io","version":"1.0.1","minLogStreamVersion":"4.13.0","author":"VisiCore Tech - CriblPacks@VisiCoreTech.com ","description":"Cribl Edge Pack that collects VS Code application logs, Copilot extension logs, user settings, and extension inventory from the local filesystem. Includes pipeline enrichment to identify Copilot-specific log sources. Each data source gets a unique datatype metadata value for downstream sourcetype mapping.","displayName":"VS Code & Copilot Logs Pack For Edge","tags":{"streamtags":["vct","ai","vscode","copilot","github"],"dataType":["logs"]},"exports":[]}
+{
+  "name": "cc-edge-vscode-io",
+  "version": "1.0.2",
+  "minLogStreamVersion": "4.13.0",
+  "author": "VisiCore Tech - CriblPacks@VisiCoreTech.com",
+  "description": "Cribl Edge Pack that collects VS Code application logs, Copilot extension logs, user settings, and extension inventory from the local filesystem. Includes pipeline enrichment to identify Copilot-specific log sources. Each data source gets a unique datatype metadata value for downstream sourcetype mapping.",
+  "displayName": "VS Code & Copilot Logs Pack For Edge",
+  "tags": {
+    "streamtags": [
+      "vct",
+      "ai",
+      "vscode",
+      "copilot",
+      "github"
+    ],
+    "dataType": [
+      "logs"
+    ]
+  },
+  "exports": []
+}
