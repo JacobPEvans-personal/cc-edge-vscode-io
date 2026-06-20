@@ -23,34 +23,53 @@ Copilot-specific log sources.
 
 ## Data Contract
 
-Events leave this pack tagged with a `datatype` metadata field; Cribl Stream maps datatypes to
-Splunk sourcetypes/indexes per the table below. Knowledge objects for the sourcetypes ship in
-[VisiCore_TA_AI_Observability](https://github.com/JacobPEvans/VisiCore_TA_AI_Observability) (v0.2.0+).
+Each event leaves this pack tagged with a `datatype` metadata field. Downstream a Cribl Stream
+worker maps that `datatype` to a Splunk sourcetype and index per the table below. This is the
+stable contract the pack guarantees — any consumer that provides matching sourcetype/index
+definitions can ingest the output without changes here.
 
-| Input | Datatype | Splunk sourcetype | Index | TA support |
-|---|---|---|---|---|
-| `vscode-logs` | `vscode-logs` | `vscode:logs` | `vscode` | ✓ (0.2.0+) |
-| `vscode-settings` | `vscode-settings` | `vscode:settings` | `vscode` | ✓ (0.2.0+) |
-| `vscode-extensions` | `vscode-extensions` | `vscode:extensions` | `vscode` | ✓ (0.2.0+) |
+| Input | Datatype | Splunk sourcetype | Index |
+|---|---|---|---|
+| `vscode-logs` | `vscode-logs` | `vscode:logs` | `vscode` |
+| `vscode-settings` | `vscode-settings` | `vscode:settings` | `vscode` |
+| `vscode-extensions` | `vscode-extensions` | `vscode:extensions` | `vscode` |
 
-## Setup
+Consumers are responsible for defining the `vscode:*` sourcetypes and the `vscode` index in their
+Splunk environment; this pack emits the `datatype` tag and leaves index/sourcetype resolution to
+the receiving Stream worker.
 
-### Environment Variables
+## Installation
 
-Set these environment variables before starting Cribl Edge:
+Install this pack into a Cribl Edge node, then set the environment variables below before starting
+Cribl Edge so the file-monitor inputs can resolve their source paths:
 
 | Variable | Purpose | macOS | Linux | Windows |
 |---|---|---|---|---|
 | `VSCODE_HOME` | VS Code data directory | `~/Library/Application Support/Code` | `~/.config/Code` | `%APPDATA%\Code` |
 | `VSCODE_EXT_HOME` | User home directory | `/Users/<user>` | `/home/<user>` | `C:\Users\<user>` |
 
-### Pipeline Enrichment
+For example, on macOS:
 
-The `main` pipeline adds a `copilot_source` field to events based on the source file path:
+```bash
+export VSCODE_HOME="$HOME/Library/Application Support/Code"
+export VSCODE_EXT_HOME="$HOME"
+```
 
-- `copilot-chat` — logs from `GitHub.copilot-chat` extension
-- `copilot` — logs from `GitHub.copilot` extension
+## Usage
+
+The `vscode-logs` input is enabled by default and begins collecting on start. The
+`vscode-settings` and `vscode-extensions` inputs ship disabled — enable them in the Cribl Edge UI
+when you want settings snapshots or extension inventory.
+
+The `main` pipeline enriches every event with a `copilot_source` field derived from the source
+file path:
+
+- `copilot-chat` — logs from the `GitHub.copilot-chat` extension
+- `copilot` — logs from the `GitHub.copilot` extension
 - `null` — all other VS Code logs
+
+Events are emitted tagged with the `datatype` metadata field described in
+[Data Contract](#data-contract) for downstream routing.
 
 ## Troubleshooting
 
@@ -74,3 +93,7 @@ The `main` pipeline adds a `copilot_source` field to events based on the source 
 - Initial release
 - 3 file monitor inputs (logs enabled, settings and extensions disabled)
 - Copilot source enrichment pipeline
+
+---
+
+> Part of a [larger ecosystem of ~40 repos](https://docs.jacobpevans.com) — see how it all fits together.

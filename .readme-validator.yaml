@@ -1,6 +1,6 @@
 required_sections:
-  - Pack Components
-  - Setup
+  - Installation
+  - Usage
 optional_sections:
   - Contributing to the Pack
   - Release Notes
